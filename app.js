@@ -1,9 +1,10 @@
-import express from "express";
-import UsersRoutes from "./routes/UsersRoutes.js";
-import path from "path";
+// app.js
+const express = require("express");
+const UsersRoutes = require("./routes/UsersRoutes.js");
+const path = require("path");
 
 const app = express();
-const __dirname = path.resolve();
+console.log(__dirname);
 
 app.use(express.json()); // Permitir JSON en las peticiones
 app.use("/apiV1/users", UsersRoutes);

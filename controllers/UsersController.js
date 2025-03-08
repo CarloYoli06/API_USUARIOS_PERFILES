@@ -1,9 +1,9 @@
 // controllers/UsersController.js
-import db from '../models/firebase.js';
-import { collection, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+const db = require('../models/firebase.js');
+const { collection, addDoc, getDoc, getDocs, doc, updateDoc, deleteDoc } = require('firebase/firestore');
 
 // Crear un nuevo usuario
-export const createUser = async (req, res) => {
+const createUser = async (req, res) => {
   try {
     const userData = req.body;
     const docRef = await addDoc(collection(db, 'users'), userData);
@@ -14,7 +14,7 @@ export const createUser = async (req, res) => {
 };
 
 // Obtener todos los usuarios
-export const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
     const querySnapshot = await getDocs(collection(db, 'users'));
     const users = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -25,7 +25,7 @@ export const getAllUsers = async (req, res) => {
 };
 
 // Obtener un usuario por su ID
-export const getUser = async (req, res) => {
+const getUser = async (req, res) => {
   try {
     const userId = req.params.id;
     const userDoc = await getDoc(doc(db, 'users', userId));
@@ -40,7 +40,7 @@ export const getUser = async (req, res) => {
 };
 
 // Actualizar un usuario por su ID
-export const updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
     const updateData = req.body;
@@ -52,7 +52,7 @@ export const updateUser = async (req, res) => {
 };
 
 // Eliminar un usuario por su ID
-export const deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
     await deleteDoc(doc(db, 'users', userId));
@@ -60,4 +60,12 @@ export const deleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).send(error.message);
   }
+};
+
+module.exports = {
+  createUser,
+  getAllUsers,
+  getUser,
+  updateUser,
+  deleteUser
 };
