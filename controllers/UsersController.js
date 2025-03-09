@@ -73,48 +73,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const getSharedInterests = async (req, res) => {
-  try {
-    // Retrieve all user documents from the "users" collection
-    const snapshot = await getDocs(collection(db, "users"));
-    const users = [];
-    snapshot.forEach((doc) => {
-      users.push(doc.data());
-    });
-
-    // Build a mapping from interest to an array of user identifiers (e.g., correo)
-    const interestMap = {};
-    users.forEach((user) => {
-      if (user.intereses && Array.isArray(user.intereses)) {
-        user.intereses.forEach((interest) => {
-          if (!interestMap[interest]) {
-            interestMap[interest] = [];
-          }
-          interestMap[interest].push(user.correo);
-        });
-      }
-    });
-
-    // Use a Set to avoid counting a user more than once.
-    const sharedUsers = new Set();
-    // For each interest, if more than one user has it, add all those users.
-    for (const interest in interestMap) {
-      if (interestMap[interest].length > 1) {
-        interestMap[interest].forEach((email) => sharedUsers.add(email));
-      }
-    }
-
-    // Respond with the count and optionally the list of users that share at least one interest.
-    res.json({
-      count: sharedUsers.size,
-      sharedUsers: Array.from(sharedUsers),
-    });
-  } catch (error) {
-    console.error("Error fetching or processing data:", error);
-    res.status(500).send("Internal Server Error");
-  }
-};
-
 const getUserRecommendations = async (req, res) => {
   try {
     const userId = req.params.id;
@@ -234,7 +192,6 @@ module.exports = {
   getUser,
   updateUser,
   deleteUser,
-  getSharedInterests,
   getUserRecommendations,
-  getUserReputation,
+  getUserReputation
 };
