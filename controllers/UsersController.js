@@ -186,6 +186,51 @@ const getUserReputation = async (req, res) => {
   }
 };
 
+const addUserActivity = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { accion } = req.body;
+
+    // Validar que la acción esté dentro de las permitidas
+    const accionesPermitidas = [
+      "Inició sesión",
+      "Actualizó su perfil",
+      "Registró un nuevo comentario",
+      "Comentó en un post",
+      "Subió un video",
+      "Publicó una foto",
+    ];
+
+    if (!accionesPermitidas.includes(accion)) {
+      return res.status(400).json({ error: "Acción no permitida" });
+    }
+
+    // Obtener el documento del usuario
+    const userDocRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    // Crear la nueva actividad
+    const nuevaActividad = {
+      accion: accion,
+      fecha: new Date().toISOString(),
+    };
+
+    // Actualizar el array de actividades del usuario
+    await updateDoc(userDocRef, {
+      actividad: [...userDoc.data().actividad, nuevaActividad],
+    });
+
+    res.status(200).json({ message: "Actividad agregada correctamente", actividad: nuevaActividad });
+  } catch (error) {
+    console.error("Error agregando actividad:", error);
+    res.status(500).send("Error Interno del Servidor");
+  }
+};
+
 module.exports = {
   createUser,
   getAllUsers,
@@ -193,5 +238,6 @@ module.exports = {
   updateUser,
   deleteUser,
   getUserRecommendations,
-  getUserReputation
+  getUserReputation,
+  addUserActivity
 };
