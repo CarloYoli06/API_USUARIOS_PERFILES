@@ -21,15 +21,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Función para crear un nuevo usuario
-    const createUser = async (name, email) => {
+    const createUser = async (name, email, age, street, city, country) => {
         try {
             const response = await fetch("/apiV1/users", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ nombre: name, email })
+                body: JSON.stringify({
+                    nombre: name,
+                    correo: email,
+                    edad: age,
+                    direccion: {
+                        calle: street,
+                        ciudad: city,
+                        pais: country
+                    }
+                })
             });
             if (response.ok) {
                 loadUsers(); // Recargar la lista de usuarios
@@ -38,6 +46,20 @@ document.addEventListener("DOMContentLoaded", () => {
             console.error("Error al crear el usuario:", error);
         }
     };
+    
+    createUserForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("user-name").value;
+        const email = document.getElementById("user-email").value;
+        const age = document.getElementById("user-age").value;
+        const street = document.getElementById("user-street").value;
+        const city = document.getElementById("user-city").value;
+        const country = document.getElementById("user-country").value;
+        if (name && email) {
+            createUser(name, email, age, street, city, country);
+            createUserForm.reset(); // Limpiar los campos de texto
+        }
+    });
 
     // Función para obtener recomendaciones de usuarios
     const getRecommendations = async (userId) => {
@@ -75,15 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Manejar el envío del formulario de creación de usuario
-    createUserForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const name = document.getElementById("user-name").value;
-        const email = document.getElementById("user-email").value;
-        if (name && email) {
-            createUser(name, email);
-            createUserForm.reset(); // Limpiar los campos de texto
-        }
-    });
+
 
     // Manejar el envío del formulario de recomendaciones
     const getRecommendationsForm = document.getElementById("get-recommendations-form");
@@ -147,15 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Manejar el envío del formulario de creación de usuario
-    createUserForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const name = document.getElementById("user-name").value;
-        const email = document.getElementById("user-email").value;
-        if (name && email) {
-            createUser(name, email);
-            createUserForm.reset(); // Limpiar los campos de texto
-        }
-    });
+    
 
     // Manejar el envío del formulario de agregar actividad
     const addActivityForm = document.getElementById("add-activity-form");
