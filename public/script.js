@@ -23,22 +23,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const createUser = async (name, email, age, street, city, country) => {
         try {
+            // Estructura completa del usuario con valores predeterminados
+            const userData = {
+                nombre: name,
+                correo: email,
+                edad: age || null, // Si no se proporciona una edad, se establece como null
+                esAdministrador: false, // Valor predeterminado
+                intereses: [], // Array vacío por defecto
+                fechaRegistro: new Date().toISOString(), // Fecha y hora actual en formato ISO
+                direccion: {
+                    calle: street || '', // Si no se proporciona una calle, se establece como cadena vacía
+                    ciudad: city || '', // Si no se proporciona una ciudad, se establece como cadena vacía
+                    pais: country || '' // Si no se proporciona un país, se establece como cadena vacía
+                },
+                actividad: [] // Array vacío por defecto
+            };
+    
             const response = await fetch("/apiV1/users", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({
-                    nombre: name,
-                    correo: email,
-                    edad: age,
-                    direccion: {
-                        calle: street,
-                        ciudad: city,
-                        pais: country
-                    }
-                })
+                body: JSON.stringify(userData)
             });
+    
             if (response.ok) {
                 loadUsers(); // Recargar la lista de usuarios
             }

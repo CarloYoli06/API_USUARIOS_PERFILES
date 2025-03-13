@@ -88,3 +88,28 @@ button:hover {
     font-family: "Courier New", Courier, monospace;
     color: #333;
 }
+/* Estilos específicos para el formulario con ID create-user-form */
+#create-user-form {
+    display: block; /* Cambia el display a block para que los elementos no estén en línea */
+}
+
+#create-user-form input,
+#create-user-form button {
+    display: block; /* Hace que cada input y el botón ocupen su propia línea */
+    width: 100%; /* Ocupa el ancho completo del contenedor */
+    margin-bottom: 10px; /* Añade un margen inferior para separar los elementos */
+    padding: 0.5rem; /* Añade un poco de padding para mejor apariencia */
+    border: 1px solid #ccc; /* Borde para los inputs */
+    border-radius: 4px; /* Bordes redondeados */
+}
+
+#create-user-form button {
+    background: #5c6bc0; /* Color de fondo del botón */
+    color: white; /* Color del texto del botón */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+}
+
+#create-user-form button:hover {
+    background: #3949ab; /* Cambia el color de fondo al pasar el mouse */
+}
