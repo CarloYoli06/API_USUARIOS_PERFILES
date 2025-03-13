@@ -83,9 +83,20 @@
             <pre><code>POST /apiV1/users</code></pre>
             <p>Crea un nuevo usuario. El cuerpo de la solicitud debe ser un JSON con los campos <code>nombre</code> y <code>correo</code>.</p>
             <pre><code>{
-    "nombre": "Nombre del usuario",
-    "correo": "email@example.com"
-}</code></pre>
+                "nombre": "Juan Pérez",
+                "correo": "juan@example.com",
+                "edad": 25,
+                "esAdministrador": false,
+                "intereses": ["Programación", "IA", "Seguridad Informática"],
+                "direccion": {
+                  "calle": "Av. Principal 123",
+                  "ciudad": "Tepic",
+                  "pais": "México"
+                },
+                "actividad": [
+                ]
+              }
+              </code></pre>
 
             <h3>Actualizar un usuario</h3>
             <pre><code>PUT /apiV1/users/{id}</code></pre>
