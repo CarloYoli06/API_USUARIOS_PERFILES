@@ -62,6 +62,31 @@ const updateUser = async (req, res) => {
   }
 };
 
+// Actualizar parcialmente un usuario por su ID
+const patchUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const updateData = req.body;
+
+    // Obtener el documento del usuario
+    const userDocRef = doc(db, "users", userId);
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+      return res.status(404).send("Usuario no encontrado");
+    }
+
+    // Actualizar solo los campos proporcionados en el cuerpo de la solicitud
+    await updateDoc(userDocRef, updateData);
+
+    // Obtener el documento actualizado para devolverlo en la respuesta
+    const updatedUserDoc = await getDoc(userDocRef);
+    res.status(200).send({ id: updatedUserDoc.id, ...updatedUserDoc.data() });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 // Eliminar un usuario por su ID
 const deleteUser = async (req, res) => {
   try {
@@ -239,5 +264,6 @@ module.exports = {
   deleteUser,
   getUserRecommendations,
   getUserReputation,
-  addUserActivity
+  addUserActivity,
+  patchUser
 };

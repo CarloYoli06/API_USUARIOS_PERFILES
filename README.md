@@ -1,6 +1,6 @@
 # API de Usuarios
 
-Esta es una API diseñada para gestionar usuarios y sus actividades. Proporciona endpoints para crear, leer, actualizar y eliminar usuarios, así como para gestionar sus actividades y obtener recomendaciones basadas en su comportamiento.
+Esta es una API diseñada para gestionar usuarios y sus actividades. Proporciona endpoints para crear, leer, actualizar y eliminar usuarios, así como para gestionar sus actividades, obtener recomendaciones basadas en su comportamiento y calcular su reputación.
 
 La API está hosteada en: [https://api-usuarios-perfiles.onrender.com/](https://api-usuarios-perfiles.onrender.com/)
 
@@ -31,12 +31,14 @@ Devuelve una lista de todos los usuarios.
     }
 ]
 ```
-Obtener un usuario por ID
-GET /apiV1/users/{id}
+
+### Obtener un usuario por ID
+
+**GET** `/apiV1/users/{id}`
 
 Devuelve un usuario específico por su ID.
 
-Ejemplo de respuesta:
+**Ejemplo de respuesta:**
 ```json
 {
     "id": 1,
@@ -53,12 +55,14 @@ Ejemplo de respuesta:
     "actividad": []
 }
 ```
-Crear un nuevo usuario
-POST /apiV1/users
 
-Crea un nuevo usuario. El cuerpo de la solicitud debe ser un JSON con los campos nombre y correo.
+### Crear un nuevo usuario
 
-Ejemplo de solicitud:
+**POST** `/apiV1/users`
+
+Crea un nuevo usuario. El cuerpo de la solicitud debe ser un JSON con los campos `nombre`, `correo`, `edad`, `esAdministrador`, `intereses`, `direccion` y `actividad`.
+
+**Ejemplo de solicitud:**
 ```json
 {
     "nombre": "Juan Pérez",
@@ -74,7 +78,8 @@ Ejemplo de solicitud:
     "actividad": []
 }
 ```
-Ejemplo de respuesta:
+
+**Ejemplo de respuesta:**
 ```json
 {
     "id": 1,
@@ -91,19 +96,22 @@ Ejemplo de respuesta:
     "actividad": []
 }
 ```
-Actualizar un usuario
-PUT /apiV1/users/{id}
 
-Actualiza un usuario existente. El cuerpo de la solicitud debe ser un JSON con los campos nombre y correo.
+### Actualizar un usuario
 
-Ejemplo de solicitud:
+**PUT** `/apiV1/users/{id}`
+
+Actualiza un usuario existente. El cuerpo de la solicitud debe ser un JSON con los campos `nombre` y `correo`.
+
+**Ejemplo de solicitud:**
 ```json
 {
     "nombre": "Nombre actualizado",
     "correo": "email_actualizado@example.com"
 }
 ```
-Ejemplo de respuesta:
+
+**Ejemplo de respuesta:**
 ```json
 {
     "id": 1,
@@ -120,42 +128,55 @@ Ejemplo de respuesta:
     "actividad": []
 }
 ```
-Eliminar un usuario
-DELETE /apiV1/users/{id}
+
+### Actualizar datos específicos de un usuario
+
+**PATCH** `/apiV1/users/{id}`
+
+Actualiza datos específicos de un usuario utilizando su ID.
+
+**Ejemplo de solicitud:**
+```json
+{
+    "edad": 26,
+    "intereses": ["Programación", "IA", "Seguridad Informática", "Desarrollo Web"]
+}
+```
+
+### Eliminar un usuario
+
+**DELETE** `/apiV1/users/{id}`
 
 Elimina un usuario existente por su ID.
 
-Ejemplo de respuesta:
-
+**Ejemplo de respuesta:**
 ```json
 {
     "message": "Usuario eliminado correctamente"
 }
 ```
-Agregar una Actividad a un Usuario
-POST /apiV1/users/{id}/activity
 
-Agrega una nueva actividad a un usuario específico. El cuerpo de la solicitud debe ser un JSON con el campo accion, que debe ser una de las siguientes acciones permitidas:
+### Agregar una Actividad a un Usuario
 
-Inició sesión
+**POST** `/apiV1/users/{id}/activity`
 
-Actualizó su perfil
+Agrega una nueva actividad a un usuario específico. El cuerpo de la solicitud debe ser un JSON con el campo `accion`, que debe ser una de las siguientes acciones permitidas:
 
-Registró un nuevo comentario
+- `Inició sesión`
+- `Actualizó su perfil`
+- `Registró un nuevo comentario`
+- `Comentó en un post`
+- `Subió un video`
+- `Publicó una foto`
 
-Comentó en un post
-
-Subió un video
-
-Publicó una foto
-
-Ejemplo de solicitud:
+**Ejemplo de solicitud:**
 ```json
 {
     "accion": "Inició sesión"
 }
 ```
-Ejemplo de respuesta:
+
+**Ejemplo de respuesta:**
 ```json
 {
     "message": "Actividad agregada correctamente",
@@ -165,37 +186,73 @@ Ejemplo de respuesta:
     }
 }
 ```
-Obtener Recomendaciones
-POST /apiV1/users/{id}/recommendations
 
-Obtiene recomendaciones basadas en el comportamiento del usuario.
+### Obtener la reputación de un usuario
 
-Ejemplo de respuesta:
+**GET** `/apiV1/users/reputation/{id}`
+
+Obtiene la reputación de un usuario basada en su registro de actividad.
+
+**Ejemplo de respuesta:**
+```json
+{
+    "user": {
+        "nombre": "María González",
+        "actividad": [
+            {
+                "accion": "Registró un nuevo comentario",
+                "fecha": "2024-02-16T11:00:00Z"
+            },
+            {
+                "fecha": "2024-02-16T12:00:00Z",
+                "accion": "Actualizó su perfil"
+            }
+        ]
+    },
+    "reputacion": 2,
+    "diasSinActividad": 395.3436221180556
+}
+```
+
+### Obtener recomendaciones de contactos por usuario
+
+**GET** `/apiV1/users/recommend/{id}`
+
+Obtiene una lista de contactos de interés basada en intereses y ubicación.
+
+**Ejemplo de respuesta:**
 ```json
 {
     "recomendaciones": [
-        "Ver tutoriales de IA",
-        "Unirse a grupos de programación"
+        {
+            "id": "XMTf2wGi3rxMvfLBsZdh",
+            "nombre": "Carlos López",
+            "intereses": [
+                "Programación",
+                "Seguridad Informática",
+                "Deportes"
+            ]
+        },
+        {
+            "id": "avHe9hjKXcH5mB9UxwDt",
+            "nombre": "Ricardo Hernández",
+            "intereses": [
+                "Lectura",
+                "Programación",
+                "Cocina"
+            ]
+        }
     ]
 }
 ```
-Obtener Reputación
-POST /apiV1/users/{id}/reputation
 
-Obtiene la reputación de un usuario basada en sus actividades.
+### Visualizar actividades de un usuario
 
-Ejemplo de respuesta:
-```json
-{
-    "reputacion": "Alta"
-}
-```
-Visualizar Actividades de un Usuario
-POST /apiV1/users/{id}/activities
+**GET** `/apiV1/users/{id}/activities`
 
 Obtiene las actividades de un usuario específico.
 
-Ejemplo de respuesta:
+**Ejemplo de respuesta:**
 ```json
 [
     {
@@ -208,3 +265,4 @@ Ejemplo de respuesta:
     }
 ]
 ```
+

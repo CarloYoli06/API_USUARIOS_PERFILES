@@ -8,13 +8,15 @@ const {
   deleteUser, 
   getUserRecommendations, 
   getUserReputation,
-  addUserActivity
+  addUserActivity,
+  patchUser
 } = require('../controllers/UsersController');
 
 router.post('/', createUser);
 router.get('/', getAllUsers);
 router.get('/:id', getUser);
 router.put('/:id', updateUser);
+router.patch('/:id', patchUser);
 router.delete('/:id', deleteUser);
 router.get('/recommend/:id', getUserRecommendations);
 router.get('/reputation/:id', getUserReputation);
