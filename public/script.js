@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
             userList.innerHTML = ""; // Limpiar la lista
             users.forEach(user => {
                 const li = document.createElement("li");
-                li.textContent = `${user.nombre} - ${user.correo}`;
+                li.textContent = `${user.nombre} - ${user.correo} - ${user.id}`;
                 userList.appendChild(li);
             });
         } catch (error) {
