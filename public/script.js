@@ -106,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
     } catch (error) {
       console.error("Error al obtener la reputación:", error);
+      reputationResult.innerHTML = "<li>Usuario sin reputación</li>";
     }
   };
 
@@ -144,9 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       const data = await response.json();
       if (response.ok) {
-        activityResult.innerHTML = `<p>${data.message}</p>`;
+        activityResult.innerHTML = `<li>${data.message}</li>`;
       } else {
-        activityResult.innerHTML = `<p>Error: ${data.error}</p>`;
+        activityResult.innerHTML = `<li>Error: ${data.error || "Error al agregar la actividad"}</li>`;
       }
     } catch (error) {
       console.error("Error al agregar la actividad:", error);
